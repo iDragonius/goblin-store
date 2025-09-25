@@ -14,7 +14,6 @@ export class FreekassaController {
   ): Promise<FreeKassaCreateOrderResponse> {
     // const shopId = +process.env.FK_SHOP_ID!;
     // const apiKey = process.env.FK_API_KEY!;
-
     return this.fk.createOrder(body, ip);
   }
 }

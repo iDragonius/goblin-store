@@ -21,4 +21,7 @@ export interface CreateOrderDto {
   email: string;
   ip: string;
   amount: number;
+  product: string;
+  userName: string | null;
+  userId: string;
 }

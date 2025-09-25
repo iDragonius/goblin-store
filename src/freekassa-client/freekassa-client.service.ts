@@ -48,7 +48,7 @@ export class FreekassaClientService {
     const payload = entries.map(([, v]) => String(v)).join('|');
     return createHmac('sha256', apiKey).update(payload).digest('hex');
   }
-  private generateOrderId(): string {
+  private generateOrderId(product: string): string {
     const now = new Date();
 
     const dd = String(now.getDate()).padStart(2, '0');
@@ -60,7 +60,7 @@ export class FreekassaClientService {
 
     const random = Math.floor(10000 + Math.random() * 90000);
 
-    return `ORD-${dd}${mm}${yyyy}-${hh}${min}-${random}`;
+    return `ORD-${product}-${dd}${mm}${yyyy}-${hh}${min}-${random}`;
   }
   async createOrder(
     input: Omit<
@@ -77,11 +77,14 @@ export class FreekassaClientService {
       i: this.paymentSystemId,
       ip,
       amount: input.amount,
-      paymentId: this.generateOrderId(),
-      email: this.defaultEmail,
+      paymentId: this.generateOrderId(input.product),
+      email: input.userName
+        ? `${input.userName}@dummy.local`
+        : input.userId
+          ? `${input.userId}@dummy.local`
+          : this.defaultEmail,
       currency: this.currency,
     };
-
     const signature = this.signPayloadAll(bodyWithoutSignature, this.apiKey);
 
     const body = {
