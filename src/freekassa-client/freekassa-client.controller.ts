@@ -12,6 +12,7 @@ export class FreekassaController {
     @Body() body: Omit<CreateOrderDto, 'shopId' | 'nonce' | 'signature'>,
     @Ip() ip: string,
   ): Promise<FreeKassaCreateOrderResponse> {
+    console.log(body);
     // const shopId = +process.env.FK_SHOP_ID!;
     // const apiKey = process.env.FK_API_KEY!;
     return this.fk.createOrder(body, ip);
